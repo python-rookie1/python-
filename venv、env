@@ -7,3 +7,7 @@
 from dotenv import load_dotenv
 #这行代码的作用是：打开 .env 文件，把里面的内容加载到系统的“环境变量”里
 load_dotenv()
+
+r与f的用处
+f = Format (格式化)：让字符串可以嵌入变量，像填空一样。
+r = Raw (原始)：让字符串里的反斜杠 \ 变成普通字符，不进行转义
