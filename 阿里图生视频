@@ -1,0 +1,31 @@
+import os
+from http import HTTPStatus
+from dashscope import VideoSynthesis
+import dashscope
+from dotenv import load_dotenv
+
+#这行代码的作用是：打开 .env 文件，把里面的内容加载到系统的“环境变量”里
+load_dotenv()
+
+# 以下为北京地域URL，各地域的URL不同，获取URL：https://help.aliyun.com/zh/model-studio/image-to-video-api-reference
+dashscope.base_http_api_url = 'https://dashscope.aliyuncs.com/api/v1'
+# 各地域的API Key不同。获取API Key：https://help.aliyun.com/zh/model-studio/get-api-key
+api_key = os.getenv("DASHSCOPE_API_KEY", "YOUR_API_KEY")
+
+print('please wait...')
+rsp = VideoSynthesis.call(api_key=api_key,
+                          model='wan2.6-i2v-flash',
+                          prompt='镜头从海龟下方缓缓上移，海龟悠然游动，腹部细节清晰可见。',
+                          img_url="https://help-static-aliyun-doc.aliyuncs.com/file-manage-files/zh-CN/20260121/zlpocv/wan-i2v-haigui.webp",
+                          # 【选项 B】如果想用本地图片 (如 test.webp)，请注释掉上面的 img_url，取消下面这行的注释：
+                          # image=r"C:\Users\seaan\source\repos\PythonApplication1\test.webp",
+                          resolution="720P",
+                          duration=2,
+                          shot_type="multi",
+                          prompt_extend=True,
+                          watermark=True)
+print(rsp)
+if rsp.status_code == HTTPStatus.OK:
+    print("video_url:", rsp.output.video_url)
+else:
+    print('Failed, status_code: %s, code: %s, message: %s' % (rsp.status_code, rsp.code, rsp.message))
